@@ -22,10 +22,12 @@ package org.elasticsearch.cloud.aws;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.*;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.http.IdleConnectionReaper;
 import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.ElasticsearchIllegalArgumentException;
 import org.elasticsearch.common.collect.Tuple;
@@ -155,6 +157,8 @@ public class InternalAwsS3Service extends AbstractLifecycleComponent<AwsS3Servic
         client = new AmazonS3Client(credentials, clientConfiguration);
 
         if (endpoint != null) {
+            AmazonS3ClientBuilder.defaultClient().setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration)
+            client.setEndpoint();
             client.setEndpoint(endpoint);
         }
         clients.put(clientDescriptor, client);

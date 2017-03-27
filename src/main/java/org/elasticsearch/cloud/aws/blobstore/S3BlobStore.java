@@ -21,6 +21,7 @@ package org.elasticsearch.cloud.aws.blobstore;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
@@ -71,6 +72,7 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
         }
 
         this.numberOfRetries = maxRetries;
+        client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
         if (!client.doesBucketExist(bucket)) {
             if (region != null) {
                 client.createBucket(bucket, region);
