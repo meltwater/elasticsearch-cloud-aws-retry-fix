@@ -75,17 +75,6 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
 
         this.numberOfRetries = maxRetries;
 
-        try{
-            String accelerateStatus = client.getBucketAccelerateConfiguration(new GetBucketAccelerateConfigurationRequest(bucket)).getStatus();
-            logger.info("Bucket [{}] has transfer acceleration status [{}]", bucket, accelerateStatus);
-            if(accelerateStatus.equals("Enabled")){
-                logger.info("Enabling acceleration mode on AWS client for bucket [{}]", bucket);
-                client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
-            }
-        }catch(Exception e){
-            logger.error("Failed to query bucket transfer acceleration status, consider adding s3:GetAccelerateConfiguration permission to bucket", e);
-        }
-
         if (!client.doesBucketExist(bucket)) {
             if (region != null) {
                 client.createBucket(bucket, region);

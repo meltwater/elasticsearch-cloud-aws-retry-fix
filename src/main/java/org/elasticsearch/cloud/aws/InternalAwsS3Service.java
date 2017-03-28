@@ -31,6 +31,7 @@ import com.amazonaws.http.IdleConnectionReaper;
 import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.S3ClientOptions;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.ElasticsearchIllegalArgumentException;
 import org.elasticsearch.common.collect.Tuple;
@@ -161,6 +162,7 @@ public class InternalAwsS3Service extends AbstractLifecycleComponent<AwsS3Servic
         if (endpoint != null) {
             client.setEndpoint(endpoint);
         }
+
         clients.put(clientDescriptor, client);
         return client;
     }
