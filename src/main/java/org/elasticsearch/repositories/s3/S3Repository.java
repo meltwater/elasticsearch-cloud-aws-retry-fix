@@ -120,15 +120,15 @@ public class S3Repository extends BlobStoreRepository {
         Integer maxRetries = repositorySettings.settings().getAsInt("max_retries", componentSettings.getAsInt("max_retries", 3));
         this.chunkSize = repositorySettings.settings().getAsBytesSize("chunk_size", componentSettings.getAsBytesSize("chunk_size", new ByteSizeValue(100, ByteSizeUnit.MB)));
         this.compress = repositorySettings.settings().getAsBoolean("compress", componentSettings.getAsBoolean("compress", false));
-        boolean enableTransferAcceleraton = repositorySettings.settings().getAsBoolean("enable_transfer_acceleration", false);
+        boolean enableTransferAcceleration = repositorySettings.settings().getAsBoolean("enable_transfer_acceleration", false);
 
         logger.debug("using bucket [{}], region [{}], endpoint [{}], protocol [{}], chunk_size [{}], server_side_encryption [{}], buffer_size [{}], max_retries [{}], enable_transfer_acceleration [{}]",
-                bucket, region, endpoint, protocol, chunkSize, serverSideEncryption, bufferSize, maxRetries,enableTransferAcceleraton);
+                bucket, region, endpoint, protocol, chunkSize, serverSideEncryption, bufferSize, maxRetries,enableTransferAcceleration);
 
         AmazonS3 client = s3Service.client(endpoint, protocol, region, repositorySettings.settings().get("access_key"), repositorySettings.settings().get("secret_key"), maxRetries);
 
-        logger.info("Enabling acceleration mode [{}]on AWS client", enableTransferAcceleraton);
-        client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(enableTransferAcceleraton).build());
+        logger.info("Enabling acceleration mode [{}]on AWS client", enableTransferAcceleration);
+        client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(enableTransferAcceleration).build());
 
         blobStore = new S3BlobStore(settings, client, bucket, region, serverSideEncryption, bufferSize, maxRetries);
         String basePath = repositorySettings.settings().get("base_path", null);
