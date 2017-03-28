@@ -94,17 +94,17 @@ public class AmazonS3Wrapper implements AmazonS3 {
 
     @Override
     public ListObjectsV2Result listObjectsV2(String s) throws SdkClientException, AmazonServiceException {
-        return null;
+        return delegate.listObjectsV2(s);
     }
 
     @Override
     public ListObjectsV2Result listObjectsV2(String s, String s1) throws SdkClientException, AmazonServiceException {
-        return null;
+        return delegate.listObjectsV2(s,s1);
     }
 
     @Override
     public ListObjectsV2Result listObjectsV2(ListObjectsV2Request listObjectsV2Request) throws SdkClientException, AmazonServiceException {
-        return null;
+        return delegate.listObjectsV2(listObjectsV2Request);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class AmazonS3Wrapper implements AmazonS3 {
 
     @Override
     public AccessControlList getObjectAcl(GetObjectAclRequest getObjectAclRequest) throws SdkClientException, AmazonServiceException {
-        return null;
+        return delegate.getObjectAcl(getObjectAclRequest);
     }
 
     @Override
@@ -279,22 +279,22 @@ public class AmazonS3Wrapper implements AmazonS3 {
 
     @Override
     public String getObjectAsString(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getObjectAsString(s,s1);
     }
 
     @Override
     public GetObjectTaggingResult getObjectTagging(GetObjectTaggingRequest getObjectTaggingRequest) {
-        return null;
+        return delegate.getObjectTagging(getObjectTaggingRequest);
     }
 
     @Override
     public SetObjectTaggingResult setObjectTagging(SetObjectTaggingRequest setObjectTaggingRequest) {
-        return null;
+        return delegate.setObjectTagging(setObjectTaggingRequest);
     }
 
     @Override
     public DeleteObjectTaggingResult deleteObjectTagging(DeleteObjectTaggingRequest deleteObjectTaggingRequest) {
-        return null;
+        return delegate.deleteObjectTagging(deleteObjectTaggingRequest);
     }
 
     @Override
@@ -334,87 +334,87 @@ public class AmazonS3Wrapper implements AmazonS3 {
 
     @Override
     public boolean doesObjectExist(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return false;
+        return delegate.doesObjectExist(s,s1);
     }
 
     @Override
     public BucketAccelerateConfiguration getBucketAccelerateConfiguration(String s) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getBucketAccelerateConfiguration(s);
     }
 
     @Override
     public BucketAccelerateConfiguration getBucketAccelerateConfiguration(GetBucketAccelerateConfigurationRequest getBucketAccelerateConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getBucketAccelerateConfiguration(getBucketAccelerateConfigurationRequest);
     }
 
     @Override
     public void setBucketAccelerateConfiguration(String s, BucketAccelerateConfiguration bucketAccelerateConfiguration) throws AmazonServiceException, SdkClientException {
-
+        delegate.setBucketAccelerateConfiguration(s,bucketAccelerateConfiguration);
     }
 
     @Override
     public void setBucketAccelerateConfiguration(SetBucketAccelerateConfigurationRequest setBucketAccelerateConfigurationRequest) throws AmazonServiceException, SdkClientException {
-
+        delegate.setBucketAccelerateConfiguration(setBucketAccelerateConfigurationRequest);
     }
 
     @Override
     public DeleteBucketMetricsConfigurationResult deleteBucketMetricsConfiguration(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.deleteBucketMetricsConfiguration(s,s1);
     }
 
     @Override
     public DeleteBucketMetricsConfigurationResult deleteBucketMetricsConfiguration(DeleteBucketMetricsConfigurationRequest deleteBucketMetricsConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.deleteBucketMetricsConfiguration(deleteBucketMetricsConfigurationRequest);
     }
 
     @Override
     public GetBucketMetricsConfigurationResult getBucketMetricsConfiguration(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getBucketMetricsConfiguration(s,s1);
     }
 
     @Override
     public GetBucketMetricsConfigurationResult getBucketMetricsConfiguration(GetBucketMetricsConfigurationRequest getBucketMetricsConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return getBucketMetricsConfiguration(getBucketMetricsConfigurationRequest);
     }
 
     @Override
     public SetBucketMetricsConfigurationResult setBucketMetricsConfiguration(String s, MetricsConfiguration metricsConfiguration) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.setBucketMetricsConfiguration(s,metricsConfiguration);
     }
 
     @Override
     public SetBucketMetricsConfigurationResult setBucketMetricsConfiguration(SetBucketMetricsConfigurationRequest setBucketMetricsConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.setBucketMetricsConfiguration(setBucketMetricsConfigurationRequest);
     }
 
     @Override
     public ListBucketMetricsConfigurationsResult listBucketMetricsConfigurations(ListBucketMetricsConfigurationsRequest listBucketMetricsConfigurationsRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.listBucketMetricsConfigurations(listBucketMetricsConfigurationsRequest);
     }
 
     @Override
     public DeleteBucketAnalyticsConfigurationResult deleteBucketAnalyticsConfiguration(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.deleteBucketAnalyticsConfiguration(s,s1);
     }
 
     @Override
     public DeleteBucketAnalyticsConfigurationResult deleteBucketAnalyticsConfiguration(DeleteBucketAnalyticsConfigurationRequest deleteBucketAnalyticsConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.deleteBucketAnalyticsConfiguration(deleteBucketAnalyticsConfigurationRequest);
     }
 
     @Override
     public GetBucketAnalyticsConfigurationResult getBucketAnalyticsConfiguration(String s, String s1) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getBucketAnalyticsConfiguration(s,s1);
     }
 
     @Override
     public GetBucketAnalyticsConfigurationResult getBucketAnalyticsConfiguration(GetBucketAnalyticsConfigurationRequest getBucketAnalyticsConfigurationRequest) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.getBucketAnalyticsConfiguration(getBucketAnalyticsConfigurationRequest);
     }
 
     @Override
     public SetBucketAnalyticsConfigurationResult setBucketAnalyticsConfiguration(String s, AnalyticsConfiguration analyticsConfiguration) throws AmazonServiceException, SdkClientException {
-        return null;
+        return delegate.setBucketAnalyticsConfiguration(s,analyticsConfiguration);
     }
 
     @Override

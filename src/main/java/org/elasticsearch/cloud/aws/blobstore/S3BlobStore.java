@@ -22,9 +22,11 @@ package org.elasticsearch.cloud.aws.blobstore;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.internal.ServiceUtils;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
+import com.amazonaws.services.s3.model.GetBucketAccelerateConfigurationRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import org.elasticsearch.common.Nullable;
@@ -72,7 +74,18 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
         }
 
         this.numberOfRetries = maxRetries;
-        client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
+
+        try{
+            String accelerateStatus = client.getBucketAccelerateConfiguration(new GetBucketAccelerateConfigurationRequest(bucket)).getStatus();
+            logger.info("Bucket [{}] has transfer acceleration status [{}]", bucket, accelerateStatus);
+            if(accelerateStatus.equals("Enabled")){
+                logger.info("Enabling acceleration mode on AWS client for bucket [{}]", bucket);
+                client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
+            }
+        }catch(Exception e){
+            logger.error("Failed to query bucket transfer acceleration status, consider adding s3:GetAccelerateConfiguration permission to bucket", e);
+        }
+
         if (!client.doesBucketExist(bucket)) {
             if (region != null) {
                 client.createBucket(bucket, region);
