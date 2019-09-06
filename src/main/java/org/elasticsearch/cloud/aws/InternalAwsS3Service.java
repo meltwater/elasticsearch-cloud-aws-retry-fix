@@ -189,6 +189,8 @@ public class InternalAwsS3Service extends AbstractLifecycleComponent<AwsS3Servic
             return "s3-ap-northeast-1.amazonaws.com";
         } else if ("eu-west".equals(region) || "eu-west-1".equals(region)) {
             return "s3-eu-west-1.amazonaws.com";
+        } else if ("eu-west-2".equals(region)) {
+            return "s3-eu-west-2.amazonaws.com";
         } else if ("eu-central".equals(region) || "eu-central-1".equals(region)) {
             return "s3.eu-central-1.amazonaws.com";
         } else if ("sa-east".equals(region) || "sa-east-1".equals(region)) {
