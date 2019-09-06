@@ -63,8 +63,8 @@ public class DefaultS3OutputStream extends S3OutputStream {
     private int multipartChunks;
     private List<PartETag> multiparts;
 
-    public DefaultS3OutputStream(S3BlobStore blobStore, String bucketName, String blobName, int bufferSizeInBytes, int numberOfRetries, boolean serverSideEncryption) {
-        super(blobStore, bucketName, blobName, bufferSizeInBytes, numberOfRetries, serverSideEncryption);
+    public DefaultS3OutputStream(S3BlobStore blobStore, String bucketName, String blobName, int bufferSizeInBytes, int numberOfRetries, boolean serverSideEncryption, StorageClass storageClass) {
+        super(blobStore, bucketName, blobName, bufferSizeInBytes, numberOfRetries, serverSideEncryption, storageClass);
     }
 
     @Override
@@ -139,7 +139,9 @@ public class DefaultS3OutputStream extends S3OutputStream {
             // Every implementation of the Java platform is required to support MD5 (see MessageDigest)
             throw new RuntimeException(impossible);
         }
-        PutObjectResult putObjectResult = blobStore.client().putObject(bucketName, blobName, inputStream, md);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, blobName, inputStream, md);
+        putObjectRequest = putObjectRequest.withStorageClass(getStorageClass());
+        PutObjectResult putObjectResult = blobStore.client().putObject(putObjectRequest);
 
         String localMd5 = Base64.encodeAsString(messageDigest.digest());
         String remoteMd5 = putObjectResult.getContentMd5();

@@ -35,6 +35,7 @@ import org.elasticsearch.cluster.ClusterState;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.plugins.PluginsService;
+import org.elasticsearch.repositories.RepositoryException;
 import org.elasticsearch.repositories.RepositoryMissingException;
 import org.elasticsearch.repositories.RepositoryVerificationException;
 import org.elasticsearch.snapshots.SnapshotMissingException;
@@ -91,6 +92,7 @@ abstract public class AbstractS3SnapshotRestoreTest extends AbstractAwsTest {
         PutRepositoryResponse putRepositoryResponse = client.admin().cluster().preparePutRepository("test-repo")
                 .setType("s3").setSettings(ImmutableSettings.settingsBuilder()
                         .put("base_path", basePath)
+                        .put("storage_class", "standard_ia")
                         .put("chunk_size", randomIntBetween(1000, 10000))
                 ).get();
         assertThat(putRepositoryResponse.isAcknowledged(), equalTo(true));
@@ -155,7 +157,7 @@ abstract public class AbstractS3SnapshotRestoreTest extends AbstractAwsTest {
         assertThat(clusterState.getMetaData().hasIndex("test-idx-1"), equalTo(true));
         assertThat(clusterState.getMetaData().hasIndex("test-idx-2"), equalTo(false));
     }
-    
+
     @Test
     public void testEncryption() {
 	Client client = client();
@@ -365,7 +367,7 @@ abstract public class AbstractS3SnapshotRestoreTest extends AbstractAwsTest {
         logger.info("-->  creating azure repository without any path");
         PutRepositoryResponse putRepositoryResponse = client.preparePutRepository("test-repo").setType("azure")
                 .setType("s3").setSettings(ImmutableSettings.settingsBuilder()
-                                .put("base_path", basePath)
+                        .put("base_path", basePath)
                 ).get();
         assertThat(putRepositoryResponse.isAcknowledged(), equalTo(true));
 
@@ -384,7 +386,20 @@ abstract public class AbstractS3SnapshotRestoreTest extends AbstractAwsTest {
         }
     }
 
-     private void assertRepositoryIsOperational(Client client, String repository) {
+    @Test(expected = RepositoryException.class)
+    public void testInvalidStorageClass() {
+        Client client = client();
+        logger.info("-->  creating s3 repository with bucket[{}] and path [{}]", internalCluster().getInstance(Settings.class).get("repositories.s3.bucket"), basePath);
+        client.admin().cluster().preparePutRepository("test-repo")
+                .setType("s3").setSettings(ImmutableSettings.settingsBuilder()
+                .put("base_path", basePath)
+                .put("storage_class", "invalid")
+        ).get();
+        fail("Shouldn't be here");
+
+    }
+
+    private void assertRepositoryIsOperational(Client client, String repository) {
         createIndex("test-idx-1");
         ensureGreen();
 

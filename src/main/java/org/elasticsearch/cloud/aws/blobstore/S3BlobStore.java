@@ -21,14 +21,12 @@ package org.elasticsearch.cloud.aws.blobstore;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.S3ClientOptions;
-import com.amazonaws.services.s3.internal.ServiceUtils;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
-import com.amazonaws.services.s3.model.GetBucketAccelerateConfigurationRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.model.StorageClass;
 import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.blobstore.BlobContainer;
 import org.elasticsearch.common.blobstore.BlobPath;
@@ -60,13 +58,16 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
 
     private final int numberOfRetries;
 
+    private final StorageClass storageClass;
+
     public S3BlobStore(Settings settings, AmazonS3 client, String bucket, @Nullable String region, boolean serverSideEncryption,
-                       ByteSizeValue bufferSize, int maxRetries) {
+                       ByteSizeValue bufferSize, int maxRetries, StorageClass storageClass) {
         super(settings);
         this.client = client;
         this.bucket = bucket;
         this.region = region;
         this.serverSideEncryption = serverSideEncryption;
+        this.storageClass = storageClass;
 
         this.bufferSize = (bufferSize != null) ? bufferSize : MIN_BUFFER_SIZE;
         if (this.bufferSize.getBytes() < MIN_BUFFER_SIZE.getBytes()) {
@@ -97,7 +98,9 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
         return bucket;
     }
 
-    public boolean serverSideEncryption() { return serverSideEncryption; }
+    public boolean serverSideEncryption() {
+        return serverSideEncryption;
+    }
 
     public int bufferSizeInBytes() {
         return bufferSize.bytesAsInt();
@@ -105,6 +108,10 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
 
     public int numberOfRetries() {
         return numberOfRetries;
+    }
+
+    public StorageClass storageClass() {
+        return storageClass;
     }
 
     @Override
@@ -156,7 +163,7 @@ public class S3BlobStore extends AbstractComponent implements BlobStore {
 
     protected boolean shouldRetry(AmazonClientException e) {
         if (e instanceof AmazonS3Exception) {
-            AmazonS3Exception s3e = (AmazonS3Exception)e;
+            AmazonS3Exception s3e = (AmazonS3Exception) e;
             if (s3e.getStatusCode() == 400 && "RequestTimeout".equals(s3e.getErrorCode())) {
                 return true;
             }

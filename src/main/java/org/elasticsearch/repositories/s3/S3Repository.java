@@ -21,6 +21,7 @@ package org.elasticsearch.repositories.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.StorageClass;
 import org.elasticsearch.cloud.aws.AwsS3Service;
 import org.elasticsearch.cloud.aws.blobstore.S3BlobStore;
 import org.elasticsearch.common.Strings;
@@ -118,6 +119,7 @@ public class S3Repository extends BlobStoreRepository {
         boolean serverSideEncryption = repositorySettings.settings().getAsBoolean("server_side_encryption", componentSettings.getAsBoolean("server_side_encryption", false));
         ByteSizeValue bufferSize = repositorySettings.settings().getAsBytesSize("buffer_size", componentSettings.getAsBytesSize("buffer_size", null));
         Integer maxRetries = repositorySettings.settings().getAsInt("max_retries", componentSettings.getAsInt("max_retries", 3));
+        StorageClass storageClass = StorageClass.fromValue(repositorySettings.settings().get("storage_class", componentSettings.get("storage_class", "standard")).toUpperCase());
         this.chunkSize = repositorySettings.settings().getAsBytesSize("chunk_size", componentSettings.getAsBytesSize("chunk_size", new ByteSizeValue(100, ByteSizeUnit.MB)));
         this.compress = repositorySettings.settings().getAsBoolean("compress", componentSettings.getAsBoolean("compress", false));
         boolean enableTransferAcceleration = repositorySettings.settings().getAsBoolean("enable_transfer_acceleration", false);
@@ -130,7 +132,7 @@ public class S3Repository extends BlobStoreRepository {
         logger.info("Enabling acceleration mode [{}]on AWS client", enableTransferAcceleration);
         client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(enableTransferAcceleration).build());
 
-        blobStore = new S3BlobStore(settings, client, bucket, region, serverSideEncryption, bufferSize, maxRetries);
+        blobStore = new S3BlobStore(settings, client, bucket, region, serverSideEncryption, bufferSize, maxRetries, storageClass);
         String basePath = repositorySettings.settings().get("base_path", null);
         if (Strings.hasLength(basePath)) {
             BlobPath path = new BlobPath();
