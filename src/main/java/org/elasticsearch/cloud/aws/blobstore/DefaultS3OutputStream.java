@@ -121,9 +121,13 @@ public class DefaultS3OutputStream extends S3OutputStream {
     }
 
     private boolean isMetadataBlob(String blobName) {
-        String[] parts = blobName.split("/");
-        String lastPart = parts[parts.length-1];
-        return lastPart.startsWith("snapshot-") || lastPart.startsWith("metadata-");
+            String[] parts = blobName.split("/");
+            if (parts.length > 0) {
+                String lastPart = parts[parts.length - 1];
+                return lastPart.startsWith("snapshot-") || lastPart.startsWith("metadata-");
+            } else {
+                return false;
+            }
     }
 
     protected void doUpload(S3BlobStore blobStore, String bucketName, String blobName, InputStream is, int length,
@@ -146,7 +150,7 @@ public class DefaultS3OutputStream extends S3OutputStream {
             throw new RuntimeException(impossible);
         }
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, blobName, inputStream, md);
-        if (!isMetadataBlob(blobName)) {
+        if (!isMetadataBlob(blobName) && length > 128 * 1024) {
             putObjectRequest = putObjectRequest.withStorageClass(getStorageClass());
         }
         PutObjectResult putObjectResult = blobStore.client().putObject(putObjectRequest);
