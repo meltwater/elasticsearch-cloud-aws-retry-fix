@@ -188,6 +188,10 @@ public class DefaultS3OutputStream extends S3OutputStream {
 
     protected String doInitialize(S3BlobStore blobStore, String bucketName, String blobName, boolean serverSideEncryption) {
         InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(bucketName, blobName);
+
+        if (!isMetadataBlob(blobName)) {
+            request = request.withStorageClass(getStorageClass());
+        }
         if (serverSideEncryption) {
             ObjectMetadata md = new ObjectMetadata();
             md.setSSEAlgorithm(ObjectMetadata.AES_256_SERVER_SIDE_ENCRYPTION);
