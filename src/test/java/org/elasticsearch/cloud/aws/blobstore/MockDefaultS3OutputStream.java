@@ -21,6 +21,7 @@ package org.elasticsearch.cloud.aws.blobstore;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PartETag;
+import com.amazonaws.services.s3.model.StorageClass;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import org.elasticsearch.common.io.Streams;
 
@@ -40,7 +41,7 @@ public class MockDefaultS3OutputStream extends DefaultS3OutputStream {
     private int numberOfUploadRequests = 0;
 
     public MockDefaultS3OutputStream(int bufferSizeInBytes) {
-        super(null, "test-bucket", "test-blobname", bufferSizeInBytes, 3, false);
+        super(null, "test-bucket", "test-blobname", bufferSizeInBytes, 3, false, StorageClass.Standard);
     }
 
     @Override
