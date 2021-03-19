@@ -47,9 +47,20 @@ public class AmazonS3Wrapper implements AmazonS3 {
     }
 
 
+
     @Override
-    public void setEndpoint(String endpoint) {
-        delegate.setEndpoint(endpoint);
+    public com.amazonaws.services.s3.model.Region getRegion() {
+        return delegate.getRegion();
+    }
+
+    @Override
+    public URL getUrl(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public void setEndpoint(String s) {
+
     }
 
     @Override
@@ -88,6 +99,21 @@ public class AmazonS3Wrapper implements AmazonS3 {
     }
 
     @Override
+    public ListObjectsV2Result listObjectsV2(String s) throws AmazonClientException, AmazonServiceException {
+        return null;
+    }
+
+    @Override
+    public ListObjectsV2Result listObjectsV2(String s, String s1) throws AmazonClientException, AmazonServiceException {
+        return null;
+    }
+
+    @Override
+    public ListObjectsV2Result listObjectsV2(ListObjectsV2Request listObjectsV2Request) throws AmazonClientException, AmazonServiceException {
+        return null;
+    }
+
+    @Override
     public ObjectListing listNextBatchOfObjects(ObjectListing previousObjectListing) throws AmazonClientException, AmazonServiceException {
         return delegate.listNextBatchOfObjects(previousObjectListing);
     }
@@ -120,6 +146,11 @@ public class AmazonS3Wrapper implements AmazonS3 {
     @Override
     public boolean doesBucketExist(String bucketName) throws AmazonClientException, AmazonServiceException {
         return delegate.doesBucketExist(bucketName);
+    }
+
+    @Override
+    public HeadBucketResult headBucket(HeadBucketRequest headBucketRequest) throws AmazonClientException, AmazonServiceException {
+        return null;
     }
 
     @Override
@@ -170,6 +201,11 @@ public class AmazonS3Wrapper implements AmazonS3 {
     @Override
     public AccessControlList getObjectAcl(String bucketName, String key, String versionId) throws AmazonClientException, AmazonServiceException {
         return delegate.getObjectAcl(bucketName, key, versionId);
+    }
+
+    @Override
+    public AccessControlList getObjectAcl(GetObjectAclRequest getObjectAclRequest) throws AmazonClientException, AmazonServiceException {
+        return null;
     }
 
     @Override
@@ -275,6 +311,36 @@ public class AmazonS3Wrapper implements AmazonS3 {
     @Override
     public void deleteBucketReplicationConfiguration(String bucketName) throws AmazonServiceException, AmazonClientException {
         delegate.deleteBucketReplicationConfiguration(bucketName);
+    }
+
+    @Override
+    public void deleteBucketReplicationConfiguration(DeleteBucketReplicationConfigurationRequest deleteBucketReplicationConfigurationRequest) throws AmazonServiceException, AmazonClientException {
+
+    }
+
+    @Override
+    public boolean doesObjectExist(String s, String s1) throws AmazonServiceException, AmazonClientException {
+        return false;
+    }
+
+    @Override
+    public BucketAccelerateConfiguration getBucketAccelerateConfiguration(String s) throws AmazonServiceException, AmazonClientException {
+        return null;
+    }
+
+    @Override
+    public BucketAccelerateConfiguration getBucketAccelerateConfiguration(GetBucketAccelerateConfigurationRequest getBucketAccelerateConfigurationRequest) throws AmazonServiceException, AmazonClientException {
+        return null;
+    }
+
+    @Override
+    public void setBucketAccelerateConfiguration(String s, BucketAccelerateConfiguration bucketAccelerateConfiguration) throws AmazonServiceException, AmazonClientException {
+
+    }
+
+    @Override
+    public void setBucketAccelerateConfiguration(SetBucketAccelerateConfigurationRequest setBucketAccelerateConfigurationRequest) throws AmazonServiceException, AmazonClientException {
+
     }
 
     @Override
